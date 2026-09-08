@@ -1,0 +1,12 @@
+summary.md
+__pycache__/
+*.html
+album_list.json
+urls.txt
+wx_articles/
+article_*.html
+.grade.json
+.skill-forge/
+scripts/.skill-forge/
+scripts/.claude/
+.claude/
