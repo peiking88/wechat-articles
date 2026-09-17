@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Claude Code 技能（skill）仓库：钻取微信公众号文章全集。SKILL.md 是给 Claude 的操作指南（触发条件、步骤、风控处置），`scripts/` 下两个脚本是实际执行者。修改行为时 SKILL.md 与脚本必须保持一致——SKILL.md 中的参数（如 `--interval 8`）和被拦形态都有实测依据，不是猜测值。
 
-发布地址：github.com/peiking88/wechat-article-drill
+发布地址：github.com/peiking88/wechat-articles（2026-09-17 由 wechat-article-drill 更名而来，旧地址自动重定向）
 
 ## 常用命令
 

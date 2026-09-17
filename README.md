@@ -1,4 +1,4 @@
-# wechat-article-drill
+# wechat-articles
 
 钻取微信公众号文章全集的 Claude Code 技能。
 

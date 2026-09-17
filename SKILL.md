@@ -1,5 +1,5 @@
 ---
-name: wechat-article-drill
+name: wechat-articles
 description: >
   Use when user pastes an mp.weixin.qq.com link and wants that 公众号's full archive: extract
   __biz/album_id, list the 合集, batch-fetch past IP rate-limits, extract text. Even if they
@@ -7,7 +7,7 @@ description: >
 user-invocable: true
 ---
 
-# wechat-article-drill
+# wechat-articles
 
 钻取微信公众号文章全集。微信文章不被外部搜索引擎索引，公众号历史列表需要登录态，但**专题合集页无需登录**且单篇文章 HTML 中藏有发现入口；同时微信按 IP+频率做风控（"环境异常"验证页），直接高频抓取会被拦。本技能封装 2026-09-08 实测有效的完整链路：入口发现 → 合集列表 → 绕风控批量抓取 → 正文提取。
 
