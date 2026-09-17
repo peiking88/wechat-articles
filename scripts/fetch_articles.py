@@ -5,7 +5,7 @@
   fetch_articles.py urls.txt -o wx_articles --interval 8
 
 行为:
-  - 串行 curl（短链/参数链接均可），间隔 --interval 秒（默认 8，实测 19 篇连续成功）
+  - 串行 curl（短链/参数链接均可，自带 Accept-Language 浏览器头规避形态③瞬时拒绝），间隔 --interval 秒（默认 8，实测 19 篇连续成功）
   - 自动识别风控空壳页（无 js_content / "环境异常"），标 BLOCKED 继续下一篇
   - 输出 NN.txt，首行 TITLE:/URL:；失败清单写入 <outdir>/_failed.txt
   - 断点续抓: 已存在且 >2KB 的输出跳过，直接重跑本命令只补失败/缺失篇
@@ -60,7 +60,8 @@ def main() -> None:
         if os.path.exists(out) and os.path.getsize(out) > 2048:
             print(i, "cached, skip")
             continue
-        r = subprocess.run(["curl", "-s", "-A", UA, url],
+        r = subprocess.run(["curl", "-s", "-A", UA,
+                            "-H", "Accept-Language: zh-CN,zh;q=0.9", url],
                            capture_output=True, text=True, timeout=90)
         title, body = extract_body(r.stdout or "")
         if not body or len(body) < 500:

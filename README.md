@@ -18,14 +18,15 @@
 
 ```bash
 # 1. 提取公众号标识与合集
-curl -s -A "<桌面 Chrome UA>" -H "Accept-Language: zh-CN,zh;q=0.9" \
+curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" \
+  -H "Accept-Language: zh-CN,zh;q=0.9" \
   "https://mp.weixin.qq.com/s/<token>" -o article.html
 python3 scripts/extract_album.py article.html
 
 # 2. 抓合集页，列出全部文章（URL+标题清单）
 python3 scripts/extract_album.py --album "<合集页URL>"
 
-# 3. 批量抓正文（串行 + 8 秒间隔，断点续抓）
+# 3. 批量抓正文（串行 + 8 秒间隔，断点续抓；脚本已内置 UA + Accept-Language 浏览器头）
 python3 scripts/fetch_articles.py urls.txt -o wx_articles --interval 8
 ```
 

@@ -2,8 +2,8 @@
 name: wechat-articles
 description: >
   Use when user pastes an mp.weixin.qq.com link and wants that 公众号's full archive: extract
-  __biz/album_id, list the 合集, batch-fetch past IP rate-limits, extract text. Even if they
-  just say 抓一下这个公众号. Do NOT use for one article URL or Toutiao/微博 feeds.
+  __biz/album_id, list 合集, batch-fetch past IP rate-limits, extract text. Even if they
+  just say 抓一下这个公众号. Not for one-article-only requests or Toutiao/微博 feeds.
 user-invocable: true
 ---
 
@@ -22,7 +22,7 @@ user-invocable: true
 先 curl 拿文章 HTML（短链 `/s/<token>` 形式最耐受风控；参数链接被拦时空壳页特征：约 17KB、无 `js_content`、title 为空），再跑提取脚本：
 
 ```bash
-curl -s -A "<桌面 Chrome UA>" -H "Accept-Language: zh-CN,zh;q=0.9" "https://mp.weixin.qq.com/s/<token>" -o article.html
+curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -H "Accept-Language: zh-CN,zh;q=0.9" "https://mp.weixin.qq.com/s/<token>" -o article.html
 python3 scripts/extract_album.py article.html
 ```
 
@@ -45,6 +45,7 @@ python3 scripts/fetch_articles.py urls.txt -o wx_articles --interval 8
 关键参数与理由：
 
 - `--interval 8`：8 秒间隔实测 19 篇连续成功；更快会触发风控
+- 脚本自带 `-H "Accept-Language: zh-CN,zh;q=0.9"` 浏览器头，规避形态③瞬时拒绝（与 Step 1 手动命令同指纹同 UA）
 - 脚本自动检测空壳页/验证页（无 `js_content` 或含"环境异常"），标记 BLOCKED 并继续下一篇，不浪费冷却时间
 - 输出按 urls.txt 序号命名（`00.txt`、`01.txt`…），首行 `TITLE:`/`URL:` 便于后续溯源与断点续抓
 
@@ -61,8 +62,8 @@ python3 scripts/fetch_articles.py urls.txt -o wx_articles --interval 8
 
 ## Verification
 
-- `urls.txt` 中每个 URL 对应输出文件非空且含 `TITLE:` 行；`_failed.txt` 为空或已知原因
-- 输出文件数 == urls.txt 去重后条数；抽一篇，其文件首行 `TITLE: <og:title>` 与合集页 `data-title` 一致
+- 每个输出文件正文段 ≥500 字符且不含 `<div` 等残留标签（证明剥标签链与空壳检测生效，原始 HTML dump 或空壳页过不了这条）；`_failed.txt` 为空或已知原因
+- 输出文件数 == urls.txt 行数（Step 2 已合并去重，不应有重复行）；抽一篇，其文件首行 `TITLE: <og:title>` 与合集页 `data-title` 一致
 - 合集数量 vs 实际抓到数量差异在报告中标明（合集缺篇属正常）
 
 ## Notes
